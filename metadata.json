@@ -1,0 +1,7 @@
+{
+  "name": "Ganesha Festival Adventure",
+  "description": "A vibrant, family-friendly Ganesh Chaturthi festival adventure game featuring Modak Slice, Pandal Puzzle, Puja Collector runner, Get Ready With Me (GRWM) with Bal Ganesha, and Shankar Ji Ka Damru Ganesha & Mushak Dance.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
