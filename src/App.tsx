@@ -35,7 +35,7 @@ export default function App() {
   const [completedLevels, setCompletedLevels] = useState<number[]>(() => {
     try {
       const saved = localStorage.getItem('ganesha_completed_levels');
-      return saved ? JSON.parse .filter(level=> level >= 1 && level<= 3 : [];
+      return saved ? JSON.parse(saved) .filter((level: number) => level >= 1 && level<= 3 : [];
     } catch {
       return [];
     }
