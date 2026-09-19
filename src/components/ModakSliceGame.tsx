@@ -17,7 +17,8 @@ interface GameObject {
     | 'MODAK_PISTA'
     | 'MODAK_SILVER'
     | 'OBSTACLE_SPARK'
-    | 'OBSTACLE_HUSK';
+    | 'OBSTACLE_HUSK'
+    | 'BOMB';
   x: number;
   y: number;
   vx: number;
@@ -121,12 +122,16 @@ export const ModakSliceGame: React.FC<ModakSliceGameProps> = ({
 
   // Spawn Modak or harmless obstacle with high, elegant arc
   const spawnObject = (width: number, height: number, forceModak = false) => {
-    const isObstacle = forceModak ? false : Math.random() < 0.16; // Low obstacle rate so slicing is fun
+    const roll = Math.random();
+const isBomb = forceModak ? false : roll < 0.08;
+const isObstacle = forceModak ? false : !isBomb && roll < 0.24;// Low obstacle rate so slicing is fun
 
     let type: GameObject['type'];
-    if (isObstacle) {
-      type = Math.random() > 0.5 ? 'OBSTACLE_SPARK' : 'OBSTACLE_HUSK';
-    } else {
+    if (isBomb) {
+  type = 'BOMB';
+} else if (isObstacle) {
+  type = Math.random() > 0.5 ? 'OBSTACLE_SPARK' : 'OBSTACLE_HUSK';
+} else {
       const rand = Math.random();
       if (rand < 0.42) type = 'MODAK_GOLD';
       else if (rand < 0.72) type = 'MODAK_KESAR';
@@ -183,10 +188,13 @@ export const ModakSliceGame: React.FC<ModakSliceGameProps> = ({
 
       const isObstacle =
         obj.type === 'OBSTACLE_SPARK' || obj.type === 'OBSTACLE_HUSK';
+      const isBomb = obj.type === 'BOMB'
 
       // Modaks get a 1.65x generous hitbox (radius ~72px) making it super easy and satisfying to slash!
       // Obstacles have a precise 0.85x hitbox so players don't accidentally graze them.
-      const hitRadius = isObstacle ? obj.radius * 0.85 : obj.radius * 1.65;
+     const hitRadius = isObstacle || isBomb
+  ? obj.radius * 0.85
+  : obj.radius * 1.65;
 
       let isHit = false;
 
@@ -213,8 +221,16 @@ export const ModakSliceGame: React.FC<ModakSliceGameProps> = ({
 
       if (isHit) {
         obj.sliced = true;
-        obj.sliceAngle = lenSq >= 4 ? Math.atan2(dy, dx) : (Math.random() - 0.5) * 0.6;
-
+        obj.sliceAngle = lenSq >= 4 ? Math.atan2(dy, dx) : (Math.random() - 0.5) * 0.6; 
+        if (isBomb) {
+  obj.sliced = true;
+  sound.playObstacleHit();
+  stateRef.current.screenShake = 16;
+  setWarningMessage('💣 Bomb sliced! -1 life!');
+  setTimeout(() => setWarningMessage(null), 1500);
+  onLoseLife();
+  continue;
+}
         if (!isObstacle) {
           modakSlicedInStroke++;
           sound.playSlice();
@@ -349,6 +365,7 @@ export const ModakSliceGame: React.FC<ModakSliceGameProps> = ({
           (o) =>
             !o.sliced &&
             !o.type.startsWith('OBSTACLE') &&
+            o.type !== 'BOMB'
             o.y < window.innerHeight * 0.8
         );
         if (airborneModaks.length > 0) {
@@ -713,7 +730,32 @@ export const ModakSliceGame: React.FC<ModakSliceGameProps> = ({
     const r = obj.radius;
     ctx.save();
 
-    if (obj.type === 'OBSTACLE_SPARK') {
+    if (obj.type === 'BOMB') {
+  ctx.fillStyle = '#111827';
+  ctx.beginPath();
+  ctx.arc(0, 0, r * 0.75, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.strokeStyle = '#374151';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  // Fuse
+  ctx.strokeStyle = '#92400e';
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(r * 0.35, -r * 0.65);
+  ctx.quadraticCurveTo(r * 0.65, -r, r * 0.55, -r * 1.15);
+  ctx.stroke();
+
+  // Spark
+  ctx.fillStyle = '#facc15';
+  ctx.font = 'bold 20px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('✦', r * 0.55, -r * 1.15);
+
+} else if (obj.type === 'OBSTACLE_SPARK') {
       // Firecracker Sparkler Ball with danger icon
       ctx.shadowColor = '#ef4444';
       ctx.shadowBlur = 14;
@@ -872,7 +914,7 @@ export const ModakSliceGame: React.FC<ModakSliceGameProps> = ({
         </div>
 
         <p className="text-xs text-amber-300/70 mt-2 font-medium">
-          Tip: Swipe finger across screen or drag mouse to slash. Avoid thorns & sparks!
+          Tip: Swipe finger across screen or drag mouse to slash. Avoid thorns, sparks & bombs!
         </p>
       </div>
     </div>
