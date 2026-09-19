@@ -6,15 +6,13 @@ export type GameScreen =
   | 'LEVEL_1'
   | 'LEVEL_2'
   | 'LEVEL_3'
-  | 'LEVEL_4'
-  | 'LEVEL_5'
   | 'CELEBRATION'
   | 'REWARD'
   | 'LEVEL_FAILED';
 
 export interface GameState {
-  currentLevel: 1 | 2 | 3 | 4 | 5;
-  completedLevels: number[]; // e.g. [1, 2, 3, 4]
+  currentLevel: 1 | 2 | 3;
+  completedLevels: number[]; // e.g. [1, 2, 3,]
   lives: number; // max 3
   soundEnabled: boolean;
   isPaused: boolean;
