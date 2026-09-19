@@ -217,6 +217,7 @@ export default function App() {
               ? 'PANDAL PUZZLE'
               : currentLevel === 3
               ? 'PUJA COLLECTOR'
+            : ''
           }
           lives={lives}
           objectiveText={hudObjective}
