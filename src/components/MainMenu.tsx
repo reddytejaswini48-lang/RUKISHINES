@@ -10,7 +10,7 @@ interface MainMenuProps {
   soundEnabled: boolean;
   onToggleSound: () => void;
   completedLevels: number[];
-  onSelectLevel: (lvl: 1 | 2 | 3 | 4 | 5) => void;
+  onSelectLevel: (lvl: 1 | 2 | 3) => void;
 }
 
 export const MainMenu: React.FC<MainMenuProps> = ({
@@ -48,7 +48,7 @@ export const MainMenu: React.FC<MainMenuProps> = ({
         </h2>
         
         <p className="text-xs sm:text-sm text-amber-200/85 max-w-lg mx-auto mt-2 font-medium">
-          Celebrate Ganesh Chaturthi through 4 festival adventures: Modak Slice, Pandal Puzzle, Puja Collector & Festival Costume & Jewelry Shringar!
+          Celebrate Ganesh Chaturthi through 3 festival adventures: Modak Slice, Pandal Puzzle, Puja Collector!
         </p>
       </div>
 
@@ -124,7 +124,7 @@ export const MainMenu: React.FC<MainMenuProps> = ({
             <Award size={16} /> Jump to Level:
           </span>
           <div className="flex gap-1.5 sm:gap-2">
-            {[1, 2, 3, 4, 5].map((lvl) => {
+            {[1, 2, 3].map((lvl) => {
               const isUnlocked = lvl === 1 || completedLevels.includes(lvl - 1);
               return (
                 <button
@@ -133,7 +133,7 @@ export const MainMenu: React.FC<MainMenuProps> = ({
                   disabled={!isUnlocked}
                   onClick={() => {
                     sound.playClick();
-                    onSelectLevel(lvl as 1 | 2 | 3 | 4 | 5);
+                    onSelectLevel(lvl as 1 | 2 | 3);
                   }}
                   className={`px-2.5 sm:px-3 py-1 rounded-lg font-cinzel font-bold text-xs transition ${
                     isUnlocked
