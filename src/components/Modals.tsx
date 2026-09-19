@@ -203,13 +203,9 @@ export const LevelCompleteModal: React.FC<LevelCompleteModalProps> = ({
           className="w-full py-3.5 px-6 bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-maroon-950 font-cinzel font-black text-lg rounded-2xl shadow-xl border border-amber-200 flex items-center justify-center gap-2 transition-transform active:scale-95 cursor-pointer"
         >
           <span>
-            {levelNumber === 5
+            {levelNumber === 3
               ? 'ENTER GRAND CELEBRATION!'
-              : levelNumber === 4
-              ? 'CONTINUE TO LEVEL 5 (DAMRU DANCE)'
-              : levelNumber === 3
-              ? 'CONTINUE TO LEVEL 4 (SHRINGAR)'
-              : `CONTINUE TO LEVEL ${levelNumber + 1}`}
+            : `CONTINUE TO LEVEL ${levelNumber + 1}`}
           </span>
           <Play size={20} className="fill-maroon-950" />
         </button>
@@ -253,12 +249,12 @@ export const HowToPlayModal: React.FC<HowToPlayModalProps> = ({ isOpen, onClose 
               MODAK SLICE
             </h3>
             <p className="mb-2 text-xs text-amber-200/80">
-              "Slice 5 Modaks. Avoid the obstacles!"
+              "Slice 5 Modaks. Avoid the obstacles & bombs !"
             </p>
             <ul className="list-disc list-inside space-y-1 text-xs text-amber-100">
               <li>Swipe your finger (mobile) or drag left mouse button (PC) across rising Modaks.</li>
               <li>Slice exactly 5 delicious Modaks to win.</li>
-              <li>Avoid spiky husks & obstacles to save your 3 lives!</li>
+              <li>Avoid spiky husks & obstacles & bombs to save your 3 lives!</li>
             </ul>
           </div>
 
@@ -294,40 +290,7 @@ export const HowToPlayModal: React.FC<HowToPlayModalProps> = ({ isOpen, onClose 
               <li>Jump over boxes, slide under garland gates, and dodge barriers!</li>
             </ul>
           </div>
-
-          {/* Level 4 */}
-          <div className="bg-black/30 p-4 rounded-xl border border-amber-500/30">
-            <h3 className="font-cinzel font-bold text-amber-300 text-base mb-1 flex items-center gap-2">
-              <span className="bg-amber-500 text-maroon-950 px-2 py-0.5 rounded text-xs">L4</span>
-              GET READY WITH ME (GRWM): BAL GANESHA
-            </h3>
-            <p className="mb-2 text-xs text-amber-200/80">
-              "Help Bal Ganesha get dressed and adorned for Ganesh Chaturthi in this interactive GRWM experience!"
-            </p>
-            <ul className="list-disc list-inside space-y-1 text-xs text-amber-100">
-              <li>Adorn Bal Ganesha across 8 anatomical levels: <strong>Level 1 (Crown Mukut)</strong>, <strong>Level 2 (Forehead Tilak)</strong>, <strong>Level 3 (Ears & Kundal)</strong>, <strong>Level 4 (Neck & Mala)</strong>, <strong>Level 5 (Angavastram & Janeu)</strong>, <strong>Level 6 (Wrists & Kadas)</strong>, <strong>Level 7 (Pitambar Dhoti)</strong>, and <strong>Level 8 (Modak Thali)</strong>.</li>
-              <li>Tap an item from Ganesha's wardrobe tray, then tap its body level slot (or drag & drop).</li>
-              <li>Listen to Bal Ganesha's cute reactions and dialogue as each sacred item is placed!</li>
-              <li>Interact with Bal Ganesha: Tap the <strong>Camera</strong> to strike a blessing pose, tap the <strong>Smile</strong> button to flutter his cute elephant ears, or shower <strong>Pushpa Varsha</strong> petals!</li>
-            </ul>
-          </div>
-
-          {/* Level 5 */}
-          <div className="bg-black/30 p-4 rounded-xl border border-amber-500/30">
-            <h3 className="font-cinzel font-bold text-amber-300 text-base mb-1 flex items-center gap-2">
-              <span className="bg-amber-500 text-maroon-950 px-2 py-0.5 rounded text-xs">L5</span>
-              SHANKAR JI KA DAMRU (GANESHA & MUSHAK DANCE)
-            </h3>
-            <p className="mb-2 text-xs text-amber-200/80">
-              "Make Bal Ganesha and his rat Mushak dance to the favorite cartoon song 'Shankar Ji Ka Damru'!"
-            </p>
-            <ul className="list-disc list-inside space-y-1 text-xs text-amber-100">
-              <li>Hit incoming Damru notes on the rhythm bar using keys <strong>[A, S, W, D]</strong> or tap the 4 on-screen dance pads.</li>
-              <li>Trigger joyful moves: <strong>Thumka Step</strong>, <strong>Damru Strike</strong>, <strong>Modak Jump</strong>, and <strong>Mushak Twirl</strong>!</li>
-              <li>Fill the Dance Joy Meter to 100% to lead Bappa and Mushak into the Grand Festival Aarti!</li>
-            </ul>
-          </div>
-        </div>
+ </div>
 
         <button
           onClick={() => {
@@ -393,12 +356,6 @@ export const ControlsModal: React.FC<ControlsModalProps> = ({ isOpen, onClose })
                 <span className="font-bold text-amber-300">Slide:</span> S or ↓
               </div>
               <div className="bg-amber-950/40 p-2 rounded border border-amber-600/30">
-                <span className="font-bold text-amber-300">Level 4 GRWM:</span> Click or Drag item to Bal Ganesha's level slot (1-8)
-              </div>
-              <div className="bg-amber-950/40 p-2 rounded border border-amber-600/30">
-                <span className="font-bold text-amber-300">Level 5 Dance:</span> [A, S, W, D] or Arrow Keys to hit beats
-              </div>
-              <div className="bg-amber-950/40 p-2 rounded border border-amber-600/30">
                 <span className="font-bold text-amber-300">Pause:</span> ESC or P key
               </div>
             </div>
@@ -422,10 +379,7 @@ export const ControlsModal: React.FC<ControlsModalProps> = ({ isOpen, onClose })
               <div className="bg-amber-950/40 p-2 rounded border border-amber-600/30">
                 <span className="font-bold text-amber-300">Jump / Slide:</span> Swipe UP (Jump), Swipe DOWN (Slide)
               </div>
-              <div className="bg-amber-950/40 p-2 rounded border border-amber-600/30 col-span-2">
-                <span className="font-bold text-amber-300">Level 4 GRWM:</span> Tap item in tray, then tap matching body level on Bal Ganesha (1-8)
-              </div>
-            </div>
+             </div>
             <p className="text-xs text-amber-300/80 mt-2 italic">
               *On-screen touch buttons are also available during Level 3 for effortless one-touch play on mobile!
             </p>
