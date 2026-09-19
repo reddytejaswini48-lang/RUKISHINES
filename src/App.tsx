@@ -7,8 +7,6 @@ import { IntroScreen } from './components/IntroScreen';
 import { ModakSliceGame } from './components/ModakSliceGame';
 import { PandalPuzzleGame } from './components/PandalPuzzleGame';
 import { PujaCollectorGame } from './components/PujaCollectorGame';
-import { FestivalDressUpGame } from './components/FestivalDressUpGame';
-import { GaneshaDanceGame } from './components/GaneshaDanceGame';
 import { CelebrationScreen } from './components/CelebrationScreen';
 import { RewardScreen } from './components/RewardScreen';
 import {
@@ -33,11 +31,11 @@ const DEFAULT_ATTIRE: PlayerAttireState = {
 export default function App() {
   // Screen state
   const [currentScreen, setCurrentScreen] = useState<GameScreen>('MENU');
-  const [currentLevel, setCurrentLevel] = useState<1 | 2 | 3 | 4 | 5>(1);
+  const [currentLevel, setCurrentLevel] = useState<1 | 2 | 3>(1);
   const [completedLevels, setCompletedLevels] = useState<number[]>(() => {
     try {
       const saved = localStorage.getItem('ganesha_completed_levels');
-      return saved ? JSON.parse(saved) : [];
+      return saved ? JSON.parse .filter(level=> level >= 1 && level<= 3 : [];
     } catch {
       return [];
     }
@@ -101,7 +99,7 @@ export default function App() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (
         (e.key === 'Escape' || e.key === 'p' || e.key === 'P') &&
-        ['LEVEL_1', 'LEVEL_2', 'LEVEL_3', 'LEVEL_4', 'LEVEL_5'].includes(currentScreen)
+        ['LEVEL_1', 'LEVEL_2', 'LEVEL_3'].includes(currentScreen)
       ) {
         if (!showLevelComplete && !showLevelFailed) {
           setIsPaused((prev) => !prev);
@@ -136,7 +134,7 @@ export default function App() {
   }, []);
 
   // Level Setup Helper
-  const startLevel = (lvl: 1 | 2 | 3 | 4 | 5) => {
+  const startLevel = (lvl: 1 | 2 | 3) => {
     setCurrentLevel(lvl);
     setLives(3);
     setIsPaused(false);
@@ -144,7 +142,7 @@ export default function App() {
     setShowLevelComplete(false);
 
     if (lvl === 1) {
-      setHudObjective('Slice 5 Modaks. Avoid obstacles!');
+      setHudObjective('Slice 5 Modaks. Avoid obstacles & bombs!');
       setHudProgress('0/5');
       setHudProgressPercent(0);
       setHudTimeLeft(45);
@@ -161,33 +159,18 @@ export default function App() {
       setHudProgressPercent(0);
       setHudTimeLeft(60);
       setCurrentScreen('LEVEL_3');
-    } else if (lvl === 4) {
-      setHudObjective('Get Ready With Me: Adorn Bal Ganesha with Costumes & Jewelries (1-8)');
-      setHudProgress('0/8 Adorned');
-      setHudProgressPercent(0);
-      setHudTimeLeft(undefined);
-      setCurrentScreen('LEVEL_4');
-    } else if (lvl === 5) {
-      setHudObjective('Shankar Ji Ka Damru: Make Ganesha & Mushak Dance!');
-      setHudProgress('0/25 Beats');
-      setHudProgressPercent(0);
-      setHudTimeLeft(75);
-      setCurrentScreen('LEVEL_5');
     }
   };
 
   // Handle Level Completion
-  const handleLevelComplete = (lvl: 1 | 2 | 3 | 4 | 5) => {
+  const handleLevelComplete = (lvl: 1 | 2 | 3) => {
     // Unlock level in progress
     if (!completedLevels.includes(lvl)) {
       setCompletedLevels((prev) => [...prev, lvl]);
     }
 
-    if (lvl === 1 || lvl === 2 || lvl === 3 || lvl === 4) {
-      setShowLevelComplete(true);
-    } else if (lvl === 5) {
-      // Completed Shankar Ji Ka Damru Dance! Advance to Celebration
-      setCurrentScreen('CELEBRATION');
+    setShowLevelComplete(true);
+    setCurrentScreen('CELEBRATION');
     }
   };
 
@@ -199,10 +182,6 @@ export default function App() {
     } else if (currentLevel === 2) {
       startLevel(3);
     } else if (currentLevel === 3) {
-      startLevel(4);
-    } else if (currentLevel === 4) {
-      startLevel(5);
-    } else if (currentLevel === 5) {
       setCurrentScreen('CELEBRATION');
     }
   };
@@ -227,8 +206,8 @@ export default function App() {
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-[#1a0204] text-amber-50 flex flex-col font-sans select-none">
       
-      {/* Active Game HUD (during levels 1, 2, 3, 4, 5) */}
-      {['LEVEL_1', 'LEVEL_2', 'LEVEL_3', 'LEVEL_4', 'LEVEL_5'].includes(currentScreen) && (
+      {/* Active Game HUD (during levels 1, 2, 3) */}
+      {['LEVEL_1', 'LEVEL_2', 'LEVEL_3'].includes(currentScreen) && (
         <NavbarHUD
           levelNumber={currentLevel}
           levelTitle={
@@ -238,9 +217,6 @@ export default function App() {
               ? 'PANDAL PUZZLE'
               : currentLevel === 3
               ? 'PUJA COLLECTOR'
-              : currentLevel === 4
-              ? 'GRWM: BAL GANESHA'
-              : 'DAMRU DANCE'
           }
           lives={lives}
           objectiveText={hudObjective}
@@ -321,38 +297,7 @@ export default function App() {
           />
         )}
 
-        {/* Screen: Level 4 - Festival Costume & Jewelry Selection */}
-        {currentScreen === 'LEVEL_4' && (
-          <FestivalDressUpGame
-            key="level-4-game"
-            onComplete={() => handleLevelComplete(4)}
-            onLoseLife={handleLoseLife}
-            isPaused={isPaused || showLevelFailed || showLevelComplete}
-            playerAttire={playerAttire}
-            onUpdateAttire={setPlayerAttire}
-            onUpdateProgress={(done, total) => {
-              setHudProgress(`${done}/${total} Adorned`);
-              setHudProgressPercent((done / total) * 100);
-            }}
-            onUpdateTimeLeft={(sec) => setHudTimeLeft(sec)}
-          />
-        )}
-
-        {/* Screen: Level 5 - Shankar Ji Ka Damru (Ganesha & Mushak Dance) */}
-        {currentScreen === 'LEVEL_5' && (
-          <GaneshaDanceGame
-            key="level-5-game"
-            onComplete={() => handleLevelComplete(5)}
-            onLoseLife={handleLoseLife}
-            isPaused={isPaused || showLevelFailed || showLevelComplete}
-            playerAttire={playerAttire}
-            onUpdateProgress={(score, target) => {
-              setHudProgress(`${Math.floor(score)}/${target} Joy`);
-              setHudProgressPercent((score / target) * 100);
-            }}
-            onUpdateTimeLeft={(sec) => setHudTimeLeft(sec)}
-          />
-        )}
+        
 
         {/* Screen: Final Festival Celebration */}
         {currentScreen === 'CELEBRATION' && (
@@ -401,10 +346,8 @@ export default function App() {
             : currentLevel === 2
             ? 'Festival Pandal Assembled! Ready for the Puja Collector.'
             : currentLevel === 3
-            ? 'Puja Offerings Gathered! Ready for Get Ready With Me with Bal Ganesha.'
-            : currentLevel === 4
-            ? 'Bal Ganesha is Radiantly Adorned! Ready for Shankar Ji Ka Damru Dance.'
-            : 'Divine Damru Dance Mastered! Enter the Grand Aarti Festival Celebration.'
+            ? 'Puja Offerings Gathered! Enter The Grand Party  Aarti Festival Celebration .'
+          : ''
         }
         onNext={handleNextLevelFromModal}
       />
