@@ -36,6 +36,7 @@ export default function App() {
   try {
     const saved = localStorage.getItem('ganesha_completed_levels');
     const parsed = saved ? JSON.parse(saved) : [];
+
     return Array.isArray(parsed)
       ? parsed.filter((level) => level >= 1 && level <= 3)
       : [];
