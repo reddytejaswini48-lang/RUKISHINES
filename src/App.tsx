@@ -173,8 +173,6 @@ export default function App() {
     }
 
     setShowLevelComplete(true);
-    setCurrentScreen('CELEBRATION');
-    }
   };
 
   // Proceed after completion modal
