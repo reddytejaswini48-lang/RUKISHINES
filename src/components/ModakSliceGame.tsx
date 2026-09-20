@@ -477,8 +477,8 @@ const isObstacle = forceModak ? false : !isBomb && roll < 0.24;// Low obstacle r
           ctx.rotate(obj.rotation);
           ctx.globalAlpha = Math.max(0, obj.opacity);
 
-          if (!obj.type.startsWith('OBSTACLE')) || obj.type === 'BOMB') {
-            drawObstacle(ctx, obj);
+          if (obj.type.startsWith('OBSTACLE') || obj.type === 'BOMB') {
+  drawObstacle(ctx, obj);
 } else {
   drawModak(ctx, obj);
 }
